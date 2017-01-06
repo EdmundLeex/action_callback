@@ -4,3 +4,4 @@ source 'https://rubygems.org'
 gemspec
 
 gem 'minitest-reporters', group: :test
+gem 'minitest-debugger', group: :test
