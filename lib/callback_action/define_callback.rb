@@ -11,7 +11,7 @@ module CallbackAction
 
   def define_callback(callback_hook)
     define_method("#{callback_hook}_action") do |callback, method_scope|
-      method_scope.each do |mth_name|
+      method_scope[:on].each do |mth_name|
         @_callback_chain.append_callback(callback_hook, mth_name, callback)
 
         undef_method(mth_name) if method_defined?(mth_name)
