@@ -5,6 +5,7 @@ class CallbackActionTest < Minitest::Test
     attr_reader :foobar
 
     extend CallbackAction
+
     before_action :before, only: [:foo, :double_foo, :around_foo]
     before_action :another_before, only: [:double_foo]
     after_action  :after, only: [:bar, :double_bar, :around_foo]

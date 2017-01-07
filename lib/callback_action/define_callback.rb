@@ -1,6 +1,4 @@
 module CallbackAction
-  ALLOWED_SCOPE = [:only].freeze
-
   private
 
   def initialize_callback_chain(mod)
@@ -13,9 +11,7 @@ module CallbackAction
 
   def define_callback(callback_hook)
     define_method("#{callback_hook}_action") do |callback, method_scope|
-      validate_method_scope(method_scope)
-
-      method_scope[:only].each do |mth_name|
+      method_scope.each do |mth_name|
         @_callback_chain.append_callback(callback_hook, mth_name, callback)
 
         undef_method(mth_name) if method_defined?(mth_name)
@@ -33,18 +29,5 @@ module CallbackAction
         prepend self::ActionsWithCallbacks
       end
     end
-  end
-
-  def validate_method_scope(method_scope)
-    disalloed_scope = method_scope.keys - ALLOWED_SCOPE
-
-    if disalloed_scope.empty?
-      true
-    else
-      raise MethodScopeError.new("#{disalloed_scope} contains disallowed scope.")
-    end
-  end
-
-  class MethodScopeError < StandardError
   end
 end
