@@ -6,10 +6,10 @@ class CallbackActionTest < Minitest::Test
 
     extend CallbackAction
 
-    before_action :before, only: [:foo, :double_foo, :around_foo]
-    before_action :another_before, only: [:double_foo]
-    after_action  :after, only: [:bar, :double_bar, :around_foo]
-    after_action  :another_after, only: [:double_bar]
+    before_action :before, [:foo, :double_foo, :around_foo]
+    before_action :another_before, [:double_foo]
+    after_action  :after, [:bar, :double_bar, :around_foo]
+    after_action  :another_after, [:double_bar]
 
     def initialize
       @foobar = ''
