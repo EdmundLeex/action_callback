@@ -17,18 +17,20 @@ module CallbackAction
 
       method_scope[:only].each do |mth_name|
         @_callback_chain.append_callback(callback_hook, mth_name, callback)
-        # next if method_defined?(mth_name)
 
-        to_prepend = Module.new do       
-          define_method(mth_name) do |*args, &block|
-            callbacks = self.class._callback_chain.get_callbacks(callback_hook, mth_name)
-            callbacks.each { |cb| send(cb) } if callback_hook == :before
-            super(*args, &block)
-            callbacks.each { |cb| send(cb) } if callback_hook == :after
+        undef_method(mth_name) if method_defined?(mth_name)
+
+        class_eval <<-RUBY
+          module ActionsWithCallbacks
+            define_method(:#{mth_name}) do |*args, &block|
+              self.class._callback_chain.before_chain_of(:#{mth_name}).each { |cb| send(cb) }
+              super(*args, &block)
+              self.class._callback_chain.after_chain_of(:#{mth_name}).each { |cb| send(cb) }
+            end
           end
-        end
+        RUBY
 
-        prepend to_prepend
+        prepend self::ActionsWithCallbacks
       end
     end
   end

@@ -15,24 +15,25 @@ module Callback
       CALLBACK_HOOK.each do |cb_hook|
         instance_variable_set("@_#{cb_hook}_chain", new_chain)
       end
-      @_chain = {}
     end
 
     def append_callback(callback_hook, mth, callback)
       chain = get_chain(callback_hook)
       chain[mth] << callback
-      # @_chain[mth] ||= {}
-      # @_chain[mth][callback_hook] ||= Set.new
-      # @_chain[mth][callback_hook] << callback
     end
+
+    CALLBACK_HOOK.each do |cb_hook|
+      define_method("#{cb_hook}_chain_of") do |mth_name|
+        get_callbacks(cb_hook, mth_name)
+      end
+    end
+
+    private
 
     def get_callbacks(callback_hook, mth)
       chain = get_chain(callback_hook)
       chain[mth].dup
-      # @_chain[mth]
     end
-
-    private
 
     def get_chain(callback_hook)
       instance_variable_get("@_#{callback_hook}_chain")
