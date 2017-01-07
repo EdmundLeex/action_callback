@@ -15,18 +15,16 @@ module CallbackAction
     define_method("#{callback_hook}_action") do |callback, method_scope|
       validate_method_scope(method_scope)
 
-
       method_scope[:only].each do |mth_name|
-        @_callback_chain.append_callback(mth_name, callback_hook, callback)
-        next if method_defined?(mth_name)
+        @_callback_chain.append_callback(callback_hook, mth_name, callback)
+        # next if method_defined?(mth_name)
 
         to_prepend = Module.new do       
           define_method(mth_name) do |*args, &block|
-            callbacks = self.class._callback_chain.get_callbacks(mth_name)
-
-            callbacks[:before].each { |cb| send(cb) } if callback_hook == :before
+            callbacks = self.class._callback_chain.get_callbacks(callback_hook, mth_name)
+            callbacks.each { |cb| send(cb) } if callback_hook == :before
             super(*args, &block)
-            callbacks[:after].each { |cb| send(cb) }  if callback_hook == :after
+            callbacks.each { |cb| send(cb) } if callback_hook == :after
           end
         end
 
