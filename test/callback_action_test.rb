@@ -16,6 +16,13 @@ class CallbackActionTest < Minitest::Test
 
     before_action :check_oil_filter, on: [:engine_issue, :unknown_issue]
 
+    after_action :resume_wiper_position, on: [:turn_off_wiper]
+    after_action :turn_off_light, on: [:stop]
+    after_action :turn_off_wiper, on: [:stop]
+
+    before_action :open_log,  on: [:check_alignment]
+    after_action  :close_log, on: [:check_alignment]
+
     def initialize
       @log = ''
     end
@@ -64,6 +71,34 @@ class CallbackActionTest < Minitest::Test
       insert_log 'unknown issue detected'
     end
 
+    def stop
+      insert_log 'engine stopped'
+    end
+
+    def turn_off_light
+      insert_log 'light is turned off'
+    end
+
+    def turn_off_wiper
+      insert_log 'wiper is turned off'
+    end
+
+    def resume_wiper_position
+      insert_log 'wiper position resumed'
+    end
+
+    def check_alignment
+      insert_log 'alignment checked'
+    end
+
+    def open_log
+      insert_log 'log opened'
+    end
+
+    def close_log
+      insert_log 'log closed'
+    end
+
     def insert_log(log)
       @log << log + "\n"
     end
@@ -73,7 +108,7 @@ class CallbackActionTest < Minitest::Test
     refute_nil ::CallbackAction::VERSION
   end
 
-  def test_it_adds_one_before_callback
+  def test_it_adds_a_single_before_callback
     car = Car.new
     car.turn_on_headlight
 
@@ -124,29 +159,47 @@ class CallbackActionTest < Minitest::Test
     LOG
   end
 
-  # def test_it_adds_after_callback
-  #   foobar = Foobar.new
-  #   foobar.bar
-  #   assert foobar.foobar == 'bar_after'
-  # end
+  def test_it_adds_a_single_after_callback
+    car = Car.new
+    car.turn_off_wiper
+    assert car.log.gsub(/\s+/, ' ').strip == <<-LOG.gsub(/\s+/, ' ').strip
+      wiper is turned off
+      wiper position resumed
+    LOG
+  end
 
-  # def test_it_adds_multiple_after_callback
-  #   foobar = Foobar.new
-  #   foobar.double_bar
-  #   assert foobar.foobar == 'double_bar_after_another_after'
-  # end
+  def test_it_adds_multiple_after_callbacks
+    car = Car.new
+    car.stop
+    assert car.log.gsub(/\s+/, ' ').strip == <<-LOG.gsub(/\s+/, ' ').strip
+      engine stopped
+      light is turned off
+      wiper is turned off
+      wiper position resumed
+    LOG
+  end
 
-  # def test_it_invokes_callback_everytime
-  #   foobar = Foobar.new
-  #   foobar.foo
-  #   assert foobar.foobar == 'before_foo'
-  #   foobar.foo
-  #   assert foobar.foobar == 'before_foobefore_foo'
-  # end
+  def test_it_calls_both_before_and_after_callback
+    car = Car.new
+    car.check_alignment
+    assert car.log.gsub(/\s+/, ' ').strip == <<-LOG.gsub(/\s+/, ' ').strip
+      log opened
+      alignment checked
+      log closed
+    LOG
+  end
 
-  # def test_it_calls_both_before_and_after_callback
-  #   foobar = Foobar.new
-  #   foobar.around_foo
-  #   assert foobar.foobar == 'before_around_foo_after'
-  # end
+  def test_it_invokes_callback_everytime
+    car = Car.new
+    car.check_alignment
+    car.check_alignment
+    assert car.log.gsub(/\s+/, ' ').strip == <<-LOG.gsub(/\s+/, ' ').strip
+      log opened
+      alignment checked
+      log closed
+      log opened
+      alignment checked
+      log closed
+    LOG
+  end
 end
