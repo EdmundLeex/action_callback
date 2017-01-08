@@ -1,8 +1,8 @@
+[![Build Status](https://travis-ci.org/EdmundLeex/action_callback.svg?branch=master)](https://travis-ci.org/EdmundLeex/action_callback)
+
 # CallbackAction
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/callback_action`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
+This gem gives you ability to add callbacks like `before_action` / `before_fitler` etc to your class.
 
 ## Installation
 
@@ -22,7 +22,43 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+```ruby
+class Foobar
+  before_action :foobar, on: [:foo, :bar]
+  
+  def foo
+    # ...
+  end
+
+  def bar
+    # ...
+  end
+
+  def foobar
+    # ...
+  end
+end
+```
+
+### Available callbacks
+
+Currently, you can use `before_action`, `after_action` to define callbacks.
+
+#### `before_action` / `before_filter`
+
+This will give you a before callback.
+
+```ruby
+before_action :before_callback, on: [:methods_that_will_invoke_before_callbacks]
+```
+
+#### `after_action` / `after_action`
+
+This will give you a after callback.
+
+```ruby
+after_action :after_callback, on: [:methods_that_will_invoke_after_callbacks]
+```
 
 ## Development
 
