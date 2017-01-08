@@ -1,54 +1,71 @@
 require 'test_helper'
 
 class CallbackActionTest < Minitest::Test
-  class Foobar
-    attr_reader :foobar
+  class Car
+    attr_reader :log
 
     extend CallbackAction
 
-    before_action :before, on: [:foo, :double_foo, :around_foo]
-    before_action :another_before, on: [:double_foo]
-    after_action  :after, on: [:bar, :double_bar, :around_foo]
-    after_action  :another_after, on: [:double_bar]
+    before_action :check_battery, on: [:turn_on_headlight]
+    before_action :check_engine,  on: [:start]
+    before_action :check_tire,    on: [:start]
+    before_action :check_brake,   on: [:start]
+
+    before_action :check_engine_oil, on: [:maintenance]
+    before_action :check_oil_filter, on: [:check_engine_oil]
+
+    before_action :check_oil_filter, on: [:engine_issue, :unknown_issue]
 
     def initialize
-      @foobar = ''
+      @log = ''
     end
 
-    def before
-      @foobar << 'before_'
+    def start
+      insert_log 'engine started'
     end
 
-    def another_before
-      @foobar << 'another_before_'
+    def turn_on_headlight
+      insert_log 'headlight turned on'
     end
 
-    def after
-      @foobar << '_after'
+    def check_battery
+      insert_log 'battery check completed'
     end
 
-    def another_after
-      @foobar << '_another_after'
+    def check_engine
+      insert_log 'engine check completed'
     end
 
-    def foo
-      @foobar << 'foo'
+    def check_tire
+      insert_log 'tire check completed'
     end
 
-    def double_foo
-      @foobar << 'double_foo'
+    def check_brake
+      insert_log 'brake check completed'
     end
 
-    def bar
-      @foobar << 'bar'
+    def check_oil_filter
+      insert_log 'oil filter check completed'
     end
 
-    def double_bar
-      @foobar << 'double_bar'
+    def check_engine_oil
+      insert_log 'engine oil check completed'
     end
 
-    def around_foo
-      @foobar << 'around_foo'
+    def maintenance
+      insert_log 'maintenance completed'
+    end
+
+    def engine_issue
+      insert_log 'engine issue detected'
+    end
+
+    def unknown_issue
+      insert_log 'unknown issue detected'
+    end
+
+    def insert_log(log)
+      @log << log + "\n"
     end
   end
 
@@ -56,43 +73,80 @@ class CallbackActionTest < Minitest::Test
     refute_nil ::CallbackAction::VERSION
   end
 
-  def test_it_adds_before_callback
-    foobar = Foobar.new
-    foobar.foo
+  def test_it_adds_one_before_callback
+    car = Car.new
+    car.turn_on_headlight
 
-    assert foobar.foobar == 'before_foo'
+    assert car.log.gsub(/\s+/, ' ').strip == <<-LOG.gsub(/\s+/, ' ').strip
+      battery check completed
+      headlight turned on
+    LOG
   end
 
   def test_it_adds_multiple_before_callback
-    foobar = Foobar.new
-    foobar.double_foo
+    car = Car.new
+    car.start
 
-    assert foobar.foobar == 'before_another_before_double_foo'
+    assert car.log.gsub(/\s+/, ' ').strip == <<-LOG.gsub(/\s+/, ' ').strip
+      engine check completed
+      tire check completed
+      brake check completed
+      engine started
+    LOG
   end
 
-  def test_it_adds_after_callback
-    foobar = Foobar.new
-    foobar.bar
-    assert foobar.foobar == 'bar_after'
+  def test_it_stacks_callbacks
+    car = Car.new
+    car.maintenance
+
+    assert car.log.gsub(/\s+/, ' ').strip == <<-LOG.gsub(/\s+/, ' ').strip
+      oil filter check completed
+      engine oil check completed
+      maintenance completed
+    LOG
   end
 
-  def test_it_adds_multiple_after_callback
-    foobar = Foobar.new
-    foobar.double_bar
-    assert foobar.foobar == 'double_bar_after_another_after'
+  def test_it_adds_callbacks_to_multiple_actions
+    car = Car.new
+    car.engine_issue
+
+    assert car.log.gsub(/\s+/, ' ').strip == <<-LOG.gsub(/\s+/, ' ').strip
+      oil filter check completed
+      engine issue detected
+    LOG
+
+    car = Car.new
+    car.unknown_issue
+
+    assert car.log.gsub(/\s+/, ' ').strip == <<-LOG.gsub(/\s+/, ' ').strip
+      oil filter check completed
+      unknown issue detected
+    LOG
   end
 
-  def test_it_invokes_callback_everytime
-    foobar = Foobar.new
-    foobar.foo
-    assert foobar.foobar == 'before_foo'
-    foobar.foo
-    assert foobar.foobar == 'before_foobefore_foo'
-  end
+  # def test_it_adds_after_callback
+  #   foobar = Foobar.new
+  #   foobar.bar
+  #   assert foobar.foobar == 'bar_after'
+  # end
 
-  def test_it_calls_both_before_and_after_callback
-    foobar = Foobar.new
-    foobar.around_foo
-    assert foobar.foobar == 'before_around_foo_after'
-  end
+  # def test_it_adds_multiple_after_callback
+  #   foobar = Foobar.new
+  #   foobar.double_bar
+  #   assert foobar.foobar == 'double_bar_after_another_after'
+  # end
+
+  # def test_it_invokes_callback_everytime
+  #   foobar = Foobar.new
+  #   foobar.foo
+  #   assert foobar.foobar == 'before_foo'
+  #   foobar.foo
+  #   assert foobar.foobar == 'before_foobefore_foo'
+  # end
+
+  # def test_it_calls_both_before_and_after_callback
+  #   foobar = Foobar.new
+  #   foobar.around_foo
+  #   assert foobar.foobar == 'before_around_foo_after'
+  # end
 end
