@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class CallbackActionTest < Minitest::Test
+class CallbackActionTest < Minitest::Unit::TestCase
   class Car
     attr_reader :log
 

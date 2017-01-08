@@ -15,3 +15,7 @@ module ActionCallback
     end
   end
 end
+
+if defined?(Rails)
+  ActiveRecord::Base.extend(ActionCallback)
+end
