@@ -17,5 +17,6 @@ module ActionCallback
 end
 
 if defined?(Rails)
-  ActiveRecord::Base.extend(ActionCallback)
+  base_model = Rails.version >= '5.0' ? ApplicationRecord : ActiveRecord::Base
+  base_model.extend(ActionCallback)
 end
