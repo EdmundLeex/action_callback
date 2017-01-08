@@ -17,7 +17,7 @@ module CallbackAction
         undef_method(mth_name) if method_defined?(mth_name)
 
         class_eval <<-RUBY
-          module ActionsWithCallbacks
+          module ActionWithCallbacks
             define_method(:#{mth_name}) do |*args, &block|
               self.class._callback_chain.before_chain_of(:#{mth_name}).each { |cb| send(cb) }
               super(*args, &block)
@@ -26,7 +26,7 @@ module CallbackAction
           end
         RUBY
 
-        prepend self::ActionsWithCallbacks
+        prepend self::ActionWithCallbacks
       end
     end
   end
