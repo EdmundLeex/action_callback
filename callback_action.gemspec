@@ -5,11 +5,11 @@ require 'callback_action/version'
 
 Gem::Specification.new do |spec|
   spec.name          = "callback_action"
-  spec.version       = CallbackAction::VERSION
+  spec.version       = ActionCallback::VERSION
   spec.authors       = ["Edmund Li"]
   spec.email         = ["edmund.xz.lee@gmail.com"]
 
-  spec.summary       = 'Add callback action to your ruby class'
+  spec.summary       = 'Add callback to your ruby class'
   # spec.description   = %q{TODO: Write a longer description or delete this line.}
   # spec.homepage      = "TODO: Put your gem's website or public repo URL here."
   spec.license       = "MIT"

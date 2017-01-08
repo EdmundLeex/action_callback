@@ -1,4 +1,4 @@
-module CallbackAction
+module ActionCallback
   VERSION = "0.1.0"
 
   def self.version

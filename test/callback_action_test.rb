@@ -4,7 +4,7 @@ class CallbackActionTest < Minitest::Test
   class Car
     attr_reader :log
 
-    extend CallbackAction
+    extend ActionCallback
 
     before_action :check_battery, on: [:turn_on_headlight]
     before_action :check_engine,  on: [:start]
@@ -105,7 +105,7 @@ class CallbackActionTest < Minitest::Test
   end
 
   def test_that_it_has_a_version_number
-    refute_nil ::CallbackAction::VERSION
+    refute_nil ::ActionCallback::VERSION
   end
 
   def test_it_adds_a_single_before_callback

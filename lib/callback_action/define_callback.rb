@@ -1,4 +1,4 @@
-module CallbackAction
+module ActionCallback
   private
 
   def initialize_callback_chain(mod)
