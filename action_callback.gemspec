@@ -4,7 +4,7 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'action_callback/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = "callback_action"
+  spec.name          = "action_callback"
   spec.version       = ActionCallback::VERSION
   spec.authors       = ["Edmund Li"]
   spec.email         = ["edmund.xz.lee@gmail.com"]
