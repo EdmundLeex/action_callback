@@ -24,6 +24,10 @@ module Callback
       chain[mth] << callback
     end
 
+    # This will define methods to get before / after chain of an action
+    # e.g. 
+    # before_chain_of(:method_name)
+    # this gets all the before actions of :method_name
     CALLBACK_HOOK.each do |cb_hook|
       define_method("#{cb_hook}_chain_of") do |mth_name|
         get_callbacks(cb_hook, mth_name)
@@ -42,7 +46,7 @@ module Callback
     end
 
     def new_chain
-      Hash.new { |h, k| h[k] = [] }
+      Hash.new { |h, k| h[k] = Set.new }
     end
   end
 
