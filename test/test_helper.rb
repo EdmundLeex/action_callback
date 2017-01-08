@@ -1,5 +1,5 @@
 $LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
-require 'callback_action'
+require 'action_callback'
 
 require 'minitest/autorun'
 require 'minitest/reporters'
