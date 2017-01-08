@@ -1,4 +1,7 @@
 [![Build Status](https://travis-ci.org/EdmundLeex/action_callback.svg?branch=master)](https://travis-ci.org/EdmundLeex/action_callback)
+[![Gem Version](https://badge.fury.io/rb/action_callback.svg)](https://badge.fury.io/rb/action_callback)
+[![security](https://hakiri.io/github/EdmundLeex/action_callback/master.svg)](https://hakiri.io/github/EdmundLeex/action_callback/master)
+[![Code Climate](https://codeclimate.com/github/EdmundLeex/action_callback/badges/gpa.svg)](https://codeclimate.com/github/EdmundLeex/action_callback)
 
 # CallbackAction
 
