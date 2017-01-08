@@ -22,8 +22,33 @@ Or install it yourself as:
 
 ## Usage
 
+If you are using plain ruby:
+
 ```ruby
 class Foobar
+  extend ActionCallback
+
+  before_action :foobar, on: [:foo, :bar]
+  
+  def foo
+    # ...
+  end
+
+  def bar
+    # ...
+  end
+
+  def foobar
+    # ...
+  end
+end
+```
+
+If you are using Rails, you can save the `extend ActionCallback` line in active record models
+(but you will still need that when you are defining a plain ruby class):
+
+```ruby
+class Foobar < ActiveRecord::Base
   before_action :foobar, on: [:foo, :bar]
   
   def foo
