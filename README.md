@@ -2,7 +2,7 @@
 
 # CallbackAction
 
-This gem gives you ability to add callbacks like `before_action` / `before_fitler` etc to your class.
+This gem gives you ability to add callbacks like `before_action` / `before_fitler` etc to your Active Record models and plain ruby classes.
 
 ## Installation
 
@@ -22,12 +22,10 @@ Or install it yourself as:
 
 ## Usage
 
-If you are using plain ruby:
+If you are using Rails, in your Active Record models:
 
 ```ruby
-class Foobar
-  extend ActionCallback
-
+class Foobar < ActiveRecord::Base
   before_action :foobar, on: [:foo, :bar]
   
   def foo
@@ -44,11 +42,12 @@ class Foobar
 end
 ```
 
-If you are using Rails, you can save the `extend ActionCallback` line in active record models
-(but you will still need that when you are defining a plain ruby class):
+If you are using plain ruby:
 
 ```ruby
-class Foobar < ActiveRecord::Base
+class Foobar
+  extend ActionCallback
+
   before_action :foobar, on: [:foo, :bar]
   
   def foo

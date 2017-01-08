@@ -9,8 +9,8 @@ Gem::Specification.new do |spec|
   spec.authors       = ["Edmund Li"]
   spec.email         = ["edmund.xz.lee@gmail.com"]
 
-  spec.summary       = 'Add callback to your ruby class'
-  # spec.description   = %q{TODO: Write a longer description or delete this line.}
+  spec.summary       = 'Add callbacks to your ActiveRecord models or plain Ruby classes'
+  spec.description   = "Here you can add callbacks to your models using `before_action`, `after_action`"
   spec.homepage      = "https://github.com/EdmundLeex/action_callback"
   spec.license       = "MIT"
 
