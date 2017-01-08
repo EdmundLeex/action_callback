@@ -1,3 +1,5 @@
+require 'set'
+
 module Callback
   # The chain should have each method that has callback as key
   # and each callback points to a hash with :before, :after as key
