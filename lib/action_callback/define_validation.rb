@@ -2,8 +2,6 @@ module ActionCallback
   private
 
   def initialize_validation_chain(mod)
-    # mod.instance_variable_set('@_validation_chain', Validation::Chain.new)
-
     mod.define_singleton_method(:_validation_chain) do
       @_validation_chain
     end

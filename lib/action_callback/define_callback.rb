@@ -2,9 +2,6 @@ module ActionCallback
   private
 
   def initialize_callback_chain(mod)
-    # @@_callback_chain = Callback::Chain.new
-    # mod.instance_variable_set('@_callback_chain', Callback::Chain.new)
-
     mod.define_singleton_method(:_callback_chain) do
       @_callback_chain
     end
