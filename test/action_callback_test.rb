@@ -23,6 +23,11 @@ class CallbackActionTest < Minitest::Unit::TestCase
     before_action :open_log,  on: [:check_alignment]
     after_action  :close_log, on: [:check_alignment]
 
+    validate :fingerprint_matched, before: [:open_door]
+    before_action :unlock_door, on: [:open_door]
+    validate :valid_key_present, before: [:open_door]
+    validate :car_stopped, before: [:open_hood]
+
     def initialize
       @log = ''
     end
@@ -97,6 +102,30 @@ class CallbackActionTest < Minitest::Unit::TestCase
 
     def close_log
       insert_log 'log closed'
+    end
+
+    def valid_key_present
+      insert_log 'valid key presented'
+    end
+
+    def open_door
+      insert_log 'door opened'
+    end
+
+    def unlock_door
+      insert_log 'door unlocked'
+    end
+
+    def car_stopped
+      fail 'Car is still running'
+    end
+
+    def open_hood
+      insert_log 'hood opened'
+    end
+
+    def fingerprint_matched
+      insert_log 'fingerprint matched'
     end
 
     def insert_log(log)
@@ -201,5 +230,25 @@ class CallbackActionTest < Minitest::Unit::TestCase
       alignment checked
       log closed
     LOG
+  end
+
+  def test_it_invokes_validation_before_callback
+    car = Car.new
+
+    car.open_door
+    assert car.log.gsub(/\s+/, ' ').strip == <<-LOG.gsub(/\s+/, ' ').strip
+      fingerprint matched
+      valid key presented
+      door unlocked
+      door opened
+    LOG
+  end
+
+  def test_it_does_not_invoke_action_if_validation_failed
+    car = Car.new
+
+    assert_raises RuntimeError do
+      car.open_hood
+    end
   end
 end

@@ -1,17 +1,6 @@
 require 'set'
 
-require 'set'
-
 module Validation
-  # The chain should have each method that has callback as key
-  # and each callback points to a hash with :before, :after as key
-  # each of those keys points to an array of callbacks
-  # {
-  #   method: {
-  #     before: [...],
-  #     after:  [...]
-  #   }
-  # }
   class Chain
     VALIDATION_HOOK = [:before].freeze
 
@@ -21,15 +10,11 @@ module Validation
       end
     end
 
-    def append_validation(callback_hook, mth, callback)
-      chain = get_chain(callback_hook)
-      chain[mth] << callback
+    def append_validation(validation_hook, mth, validation)
+      chain = get_chain(validation_hook)
+      chain[mth] << validation
     end
 
-    # This will define methods to get before / after chain of an action
-    # e.g. 
-    # before_chain_of(:method_name)
-    # this gets all the before actions of :method_name
     VALIDATION_HOOK.each do |cb_hook|
       define_method("#{cb_hook}_chain_of") do |mth_name|
         get_validations(cb_hook, mth_name)
@@ -38,13 +23,13 @@ module Validation
 
     private
 
-    def get_validations(callback_hook, mth)
-      chain = get_chain(callback_hook)
+    def get_validations(validation_hook, mth)
+      chain = get_chain(validation_hook)
       chain[mth].dup
     end
 
-    def get_chain(callback_hook)
-      instance_variable_get("@_#{callback_hook}_chain")
+    def get_chain(validation_hook)
+      instance_variable_get("@_#{validation_hook}_chain")
     end
 
     def new_chain
@@ -53,8 +38,8 @@ module Validation
   end
 
   class << self
-    def get_callbacks(mth)
-      @_callback_chain.get_callbacks[mth]
+    def get_validations(mth)
+      @_validation_chain.get_validations[mth]
     end
   end
 end
