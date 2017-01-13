@@ -22,7 +22,11 @@ module ActionCallback
             module ActionWithValidations
               define_method(:#{mth_name}) do |*args, &block|
                 self.class._validation_chain.before_chain_of(:#{mth_name}).each { |v| send(v) }
-                super(*args, &block)
+
+                should_run = true
+                should_run = !errors.present? if self.class.ancestors.include?(ActiveRecord::Base)
+
+                super(*args, &block) if should_run
               end
             end
           RUBY
