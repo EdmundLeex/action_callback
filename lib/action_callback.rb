@@ -1,6 +1,6 @@
-require "action_callback/version"
-require "action_callback/define_callback"
-require "action_callback/callback"
+require_relative "./action_callback/version"
+require_relative "./action_callback/define_callback"
+require_relative "./action_callback/callback"
 
 module ActionCallback
   include Callback

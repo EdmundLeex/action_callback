@@ -14,7 +14,7 @@ module ActionCallback
       method_scope[:on].each do |mth_name|
         @_callback_chain.append_callback(callback_hook, mth_name, callback)
 
-        undef_method(mth_name) if method_defined?(mth_name)
+        undef_method(mth_name) if included_modules.map(&:to_s).include?('ActionWithCallbacks')
 
         class_eval <<-RUBY
           module ActionWithCallbacks
