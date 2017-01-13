@@ -2,7 +2,8 @@ module ActionCallback
   private
 
   def initialize_callback_chain(mod)
-    mod.instance_variable_set('@_callback_chain', Callback::Chain.new)
+    # @@_callback_chain = Callback::Chain.new
+    # mod.instance_variable_set('@_callback_chain', Callback::Chain.new)
 
     mod.define_singleton_method(:_callback_chain) do
       @_callback_chain
@@ -11,8 +12,10 @@ module ActionCallback
 
   def define_callback(callback_hook)
     define_method("#{callback_hook}_action") do |callback, method_scope|
+      @_callback_chain ||= Callback::Chain.new
+
       method_scope[:on].each do |mth_name|
-        @_callback_chain.append_callback(callback_hook, mth_name, callback)
+        _callback_chain.append_callback(callback_hook, mth_name, callback)
 
         undef_method(mth_name) if included_modules.map(&:to_s).include?('ActionWithCallbacks')
 

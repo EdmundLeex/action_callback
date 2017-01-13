@@ -6,6 +6,7 @@ require_relative "./action_callback/validation"
 
 module ActionCallback
   include Callback
+  include Validation
   extend self
 
   def ActionCallback.extended(mod)

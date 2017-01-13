@@ -36,10 +36,4 @@ module Validation
       Hash.new { |h, k| h[k] = Set.new }
     end
   end
-
-  class << self
-    def get_validations(mth)
-      @_validation_chain.get_validations[mth]
-    end
-  end
 end
