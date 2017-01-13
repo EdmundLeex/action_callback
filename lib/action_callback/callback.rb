@@ -49,10 +49,4 @@ module Callback
       Hash.new { |h, k| h[k] = Set.new }
     end
   end
-
-  class << self
-    def get_callbacks(mth)
-      @_callback_chain.get_callbacks[mth]
-    end
-  end
 end
