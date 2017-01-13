@@ -5,7 +5,7 @@ module ActionCallback
     mod.instance_variable_set('@_callback_chain', Callback::Chain.new)
 
     mod.define_singleton_method(:_callback_chain) do
-      instance_variable_get('@_callback_chain')
+      @_callback_chain
     end
   end
 
