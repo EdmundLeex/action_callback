@@ -1,35 +1,35 @@
 require 'set'
 
 module Validation
+  HOOKS = [:before].freeze
+
   class Chain
-    VALIDATION_HOOK = [:before].freeze
+    HOOKS.each do |cb_hook|
+      define_method("#{cb_hook}_chain_of") do |mth_name|
+        get_hook(cb_hook, mth_name)
+      end
+    end
 
     def initialize
-      VALIDATION_HOOK.each do |cb_hook|
+      HOOKS.each do |cb_hook|
         instance_variable_set("@_#{cb_hook}_chain", new_chain)
       end
     end
 
-    def append_validation(validation_hook, mth, validation)
-      chain = get_chain(validation_hook)
-      chain[mth] << validation
-    end
-
-    VALIDATION_HOOK.each do |cb_hook|
-      define_method("#{cb_hook}_chain_of") do |mth_name|
-        get_validations(cb_hook, mth_name)
-      end
+    def append(hook_name, mth, hook_mth)
+      chain = get_chain(hook_name)
+      chain[mth] << hook_mth
     end
 
     private
 
-    def get_validations(validation_hook, mth)
-      chain = get_chain(validation_hook)
+    def get_hook(hook_name, mth)
+      chain = get_chain(hook_name)
       chain[mth].dup
     end
 
-    def get_chain(validation_hook)
-      instance_variable_get("@_#{validation_hook}_chain")
+    def get_chain(hook_name)
+      instance_variable_get("@_#{hook_name}_chain")
     end
 
     def new_chain

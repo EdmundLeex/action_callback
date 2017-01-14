@@ -11,15 +11,15 @@ class CallbackTest < Minitest::Unit::TestCase
   end
 
   def test_it_appends_callback
-    @callback_chain.append_callback(:before, :mth, :callback)
+    @callback_chain.append(:before, :mth, :callback)
     assert_includes @callback_chain.before_chain_of(:mth), :callback
   end
 
   def test_it_only_appends_unique_callbacks
-    @callback_chain.append_callback(:before, :mth, :callback)
+    @callback_chain.append(:before, :mth, :callback)
     assert @callback_chain.before_chain_of(:mth).size == 1
 
-    @callback_chain.append_callback(:before, :mth, :callback_2)
+    @callback_chain.append(:before, :mth, :callback_2)
     assert @callback_chain.before_chain_of(:mth).size == 2
   end
 end

@@ -15,7 +15,7 @@ module ActionCallback
       if options.key?(:before)
         validator_mth_name = args.first
         options[:before].each do |mth_name|
-          _validation_chain.append_validation(:before, mth_name, validator_mth_name)
+          _validation_chain.append(:before, mth_name, validator_mth_name)
           undef_method(mth_name) if included_modules.map(&:to_s).include?('ActionWithValidations')
 
           class_eval <<-RUBY

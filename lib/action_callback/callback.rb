@@ -1,39 +1,35 @@
 require 'set'
 
 module Callback
+  HOOKS = [:before, :after].freeze
+
   class Chain
-    CALLBACK_HOOK = [:before, :after].freeze
+    HOOKS.each do |cb_hook|
+      define_method("#{cb_hook}_chain_of") do |mth_name|
+        get_hook(cb_hook, mth_name)
+      end
+    end
 
     def initialize
-      CALLBACK_HOOK.each do |cb_hook|
+      HOOKS.each do |cb_hook|
         instance_variable_set("@_#{cb_hook}_chain", new_chain)
       end
     end
 
-    def append_callback(callback_hook, mth, callback)
-      chain = get_chain(callback_hook)
-      chain[mth] << callback
-    end
-
-    # This will define methods to get before / after chain of an action
-    # e.g. 
-    # before_chain_of(:method_name)
-    # this gets all the before actions of :method_name
-    CALLBACK_HOOK.each do |cb_hook|
-      define_method("#{cb_hook}_chain_of") do |mth_name|
-        get_callbacks(cb_hook, mth_name)
-      end
+    def append(hook_name, mth, hook_mth)
+      chain = get_chain(hook_name)
+      chain[mth] << hook_mth
     end
 
     private
 
-    def get_callbacks(callback_hook, mth)
-      chain = get_chain(callback_hook)
+    def get_hook(hook_name, mth)
+      chain = get_chain(hook_name)
       chain[mth].dup
     end
 
-    def get_chain(callback_hook)
-      instance_variable_get("@_#{callback_hook}_chain")
+    def get_chain(hook_name)
+      instance_variable_get("@_#{hook_name}_chain")
     end
 
     def new_chain

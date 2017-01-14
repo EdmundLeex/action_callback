@@ -12,7 +12,7 @@ module ActionCallback
       @_callback_chain ||= Callback::Chain.new
 
       method_scope[:on].each do |mth_name|
-        _callback_chain.append_callback(callback_hook, mth_name, callback)
+        _callback_chain.append(callback_hook, mth_name, callback)
 
         undef_method(mth_name) if included_modules.map(&:to_s).include?('ActionWithCallbacks')
 
