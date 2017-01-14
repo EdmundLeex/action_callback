@@ -23,6 +23,11 @@ Or install it yourself as:
 
     $ gem install callback_action
 
+## Preliminary
+
+- Ruby >= 2.1.0
+- Rails >= 4.2.6 
+
 ## Usage
 
 ### 1. `validate`
