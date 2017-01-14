@@ -9,7 +9,7 @@ Gem::Specification.new do |spec|
   spec.summary     = 'Add callbacks to your ActiveRecord models or plain Ruby classes'
   spec.description = "Here you can add callbacks to your models using `before_action`, `after_action`"
 
-  spec.required_ruby_version = ">= 2.0.0"
+  spec.required_ruby_version = ">= 2.1.0"
 
   spec.license = "MIT"
 
