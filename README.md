@@ -5,7 +5,7 @@
 
 # CallbackAction
 
-This gem gives you ability to add callbacks like `before_action` / `before_fitler` etc to your Active Record models and plain ruby classes.
+This gem gives you ability to add callbacks like `validate` / `before_action` / `before_fitler` etc to your Active Record models and plain ruby classes.
 
 ## Installation
 
